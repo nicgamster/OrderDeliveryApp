@@ -1,19 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import OrderForm from './OrderForm.jsx';
-import OrderList from './OrderList.jsx';
-import OrderDetails from './OrderDetails.jsx';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './HomePage';
+import OrdersPage from './OrderList';
+import OrderDetails from './OrderDetails';
+import OrderForm from './OrderForm';
 
-function App() {
+
+const App = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<OrderForm />} />
-                <Route path="/orders" element={<OrderList />} />
+                <Route path="/" element={<HomePage />} />
+
+                <Route path="/orders" element={<OrdersPage />} />
+
                 <Route path="/orders/:id" element={<OrderDetails />} />
+
+                <Route path="/create-order" element={<OrderForm />} />
             </Routes>
         </Router>
     );
-}
+};
 
 export default App;

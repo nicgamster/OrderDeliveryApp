@@ -1,37 +1,40 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { fetchData } from './Utils.jsx';
+
 
 const OrderList = () => {
+    const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
 
-
-    const fetchData = async () => {
-        return axios.get('https://localhost:7245/api/orders')
-        .then(res => res.data)
-        .catch(e => {
-            console.log(e)
-        })
-    }
-
     useEffect(() => {
-        fetchData().then(x => setOrders(x))
+        fetchData('https://localhost:7245/api/orders').then(x => setOrders(x))
     }, []);
-    
-    
 
+    const goBack = () => {
+        navigate(-1);
+    };
+
+    const goToOrderDetails = (id) => {
+        navigate(`/orders/${id}`);
+    };
 
     return (
-        <ul>
-            {orders.map(order => (
-                <li key={order.id}>
-                    <Link to={`/orders/${order.id}`}>
-                        {order.orderNumber} - {order.senderCity} to {order.recipientCity}
-                    </Link>
-                </li>
-            ))}
-        </ul>
+        <div>
+            <h1>Orders list</h1>
+            <button onClick={goBack}>Back</button>
+            <ul>
+                {orders.map(order => (
+                    <li key={order.id}>
+                        Order #{order.orderNumber} - {order.senderCity} -> {order.receiverCity}
+                        <button onClick={() => goToOrderDetails(order.id)}>Details</button>
+                    </li>
+                ))}
+            </ul>
+        </div>
     );
 };
 
 export default OrderList;
+

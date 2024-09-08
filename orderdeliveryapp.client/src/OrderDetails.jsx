@@ -1,39 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { fetchData } from './Utils.jsx';
 
 const OrderDetails = () => {
-    const [order, setOrder] = useState(null);
-    const { id } = useParams();
-
-
-    const fetchData = async () => {
-        return axios.get(`https://localhost:7245/api/orders/${id}`)
-            .then(res => res.data)
-            .catch(e => {
-                console.log(e)
-            })
-    }
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [order, setOrder] = useState(null);
 
     useEffect(() => {
-        fetchData().then(x => setOrder(x))
+        fetchData(`https://localhost:7245/api/orders/${id}`).then(x => setOrder(x))
     }, [id]);
 
+  const goBack = () => {
+    navigate(-1); 
+  };
 
-    if (!order) return <p>Loading...</p>;
-
-    return (
+  return (
+    <div>
+      <h1>Order Details #{id}</h1>
+      {order ? (
         <div>
-            <h2>Order Details</h2>
-            <p><strong>Order Number:</strong> {order.orderNumber}</p>
-            <p><strong>Sender City:</strong> {order.senderCity}</p>
-            <p><strong>Sender Address:</strong> {order.senderAddress}</p>
-            <p><strong>Recipient City:</strong> {order.recipientCity}</p>
-            <p><strong>Recipient Address:</strong> {order.recipientAddress}</p>
-            <p><strong>Weight:</strong> {order.weight}</p>
-            <p><strong>Pickup Date:</strong> {order.pickupDate}</p>
+          <p>Order Number: {order.orderNumber}</p>
+          <p>Sender City: {order.senderCity}</p>
+          <p>Sender Address: {order.senderAddress}</p>
+          <p>Recipient City: {order.recipientCity}</p>
+          <p>Recipient Address: {order.recipientAddress}</p>
+          <p>Weight: {order.weight} kg</p>
+          <p>Pickup Date: {new Date(order.pickupDate).toLocaleDateString()}</p>
+          <button onClick={goBack}>Back</button>
         </div>
-    );
+      ) : (
+        <p>Loading</p>
+      )}
+    </div>
+  );
 };
 
 export default OrderDetails;
+

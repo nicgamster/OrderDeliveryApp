@@ -23,7 +23,6 @@ namespace OrderDeliveryApp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Order>> CreateOrder(Order order)
         {
-            Console.WriteLine(order);
             order.OrderNumber = $"ORD-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
@@ -36,7 +35,6 @@ namespace OrderDeliveryApp.Server.Controllers
             return Ok(await _context.Orders.ToListAsync());
         }
 
-        // Простой метод для вывода сообщения в консоль
         [HttpGet("test")]
         public IActionResult TestConsoleOutput()
         {
@@ -49,13 +47,11 @@ namespace OrderDeliveryApp.Server.Controllers
         {
             try
             {
-                // Проверяем подключение, запрашивая количество записей в таблице Orders
                 var orderCount = _context.Orders.Count();
                 return Ok($"Connection successful! Orders count: {orderCount}");
             }
             catch (Exception ex)
             {
-                // Если подключение не удалось, выводим сообщение об ошибке
                 return StatusCode(500, $"Connection failed: {ex.Message}");
             }
         }

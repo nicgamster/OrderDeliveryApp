@@ -10,5 +10,6 @@
         public double Weight { get; set; }
         public DateTime PickupDate { get; set; }
         public string OrderNumber { get; set; }
+
     }
 }
